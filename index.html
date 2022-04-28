@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jackrabbit Data Demo</title>
+    <link href="style.css" type="text/css" rel="stylesheet" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div>
+      <h3>Training Schedule</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Dates</th>
+            <th>Times</th>
+          </tr>
+        </thead>
+        <tbody id="schedule"></tbody>
+      </table>
+      <div id="loading"><div class="ajax-loader"></div></div>
+    </div>
+    <script>
+      // Tip: Did you know you can use Shift+Tab on selected code to remove a tab.
+
+      function getData() {
+        const resource =
+          "https://app.jackrabbitclass.com/jr3.0/Openings/OpeningsJson";
+        const params = { OrgId: 532818 };
+
+        $.ajax({ url: resource, method: "POST", data: params }).then((data) => {
+          $("#loading").hide();
+
+          const rows = data.rows;
+          console.log(rows)
+          
+          rows.forEach((theClass) => { // saying 'class' will cause an error
+            $("#schedule").append(`
+                <tr>
+                    <td>${theClass.name}</td>
+                    <td>${theClass.start_date} to ${theClass.end_date}</td>
+                    <td>${theClass.start_time} to ${theClass.end_time}</td>
+                </tr>
+            `);
+          });
+        });
+      }
+
+      getData();
+    </script>
+  </body>
+</html>
